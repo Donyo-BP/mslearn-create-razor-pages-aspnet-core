@@ -1,0 +1,116 @@
+﻿@page
+@model ContosoPizza.Pages.PizzaListModel
+@{
+    ViewData["Title"] = "Pizza List 🍕";
+}
+<h1>Pizza List 🍕</h1>
+
+<!-- New Pizza form will go here -->
+@* Un élément <table> est créé pour afficher la liste de pizzas. *@
+<table class="table mt-5">
+    @* Un élément <thead> est créé pour contenir l’en-tête de table. *@
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">US Price</th>
+            <th scope="col">Europe Price</th>
+            <th scope="col">Size</th>
+            <th scope="col">Gluten Free</th>
+            <th scope="col">Delete Pizza</th>
+        </tr>
+    </thead>
+
+    @* L’instruction @foreach dans <tbody> itère sur la liste de pizzas. *@
+    <tbody>
+
+        @* La propriété Model référence l’objet PizzaListModel qui a été créé dans le fichier code-behind. *@
+        @foreach (var pizza in Model.PizzaList)
+        {
+            @* Chaque itération de l’instruction @foreach crée un élément <tr> qui contiendra les données de pizza : *@
+            <tr>
+                @* La syntaxe Razor est utilisée pour afficher les données de pizza dans les éléments <td>. Cette syntaxe
+            affiche les propriétés de l’objet Pizza qui est stocké dans la variable pizza. *@
+                <td>@pizza.Name</td>
+                <td>@($"{pizza.Price:C}")</td> @* Price est mis en forme par interpolation de chaîne C#. *@
+                <td>@pizza.Price €</td> @* Price est mis en forme par interpolation de chaîne C#. *@
+                <td>@pizza.Size</td>
+
+                @* Une expression ternaire est utilisée pour afficher la valeur
+            de la propriété IsGlutenFree sous forme de signe « ✔️ » ou de cellule vide. *@
+                <td>@(pizza.IsGlutenFree ? "✔️" : string.Empty)</td>
+
+                <td> @* Un formulaire est créé pour supprimer la pizza *@
+                    @* L’attribut asp-page-handler indique que le formulaire doit être envoyé au gestionnaire
+                Delete dans le fichier code-behind. Vous créerez ce gestionnaire dans une unité ultérieure. *@
+                    @* L’attribut asp-route-id indique que la propriété Id de l’objet Pizza doit être passée au gestionnaire
+                Delete. *@
+                    <form method="post" asp-page-handler="Delete" asp-route-id="@pizza.Id">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+
+<!-- List of pizzas will go here -->
+<form method="post">
+    @* L’attribut asp-validation-summary affiche les erreurs de validation pour l’ensemble du modèle. *@
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    @* Chaque champ de formulaire (éléments <input> et <select>) et <label> sont liés à la propriété NewPizza par
+    l’attribut asp-for. *@
+    <div class="form-group">
+        <label asp-for="NewPizza.Name" class="control-label"></label>
+        <input asp-for="NewPizza.Name" class="form-control" />
+        @* L’attribut asp-validation-for affiche les erreurs de validation pour chaque champ de formulaire. *@
+        <span asp-validation-for="NewPizza.Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="NewPizza.Size" class="control-label"></label>
+        <select asp-for="NewPizza.Size" class="form-control" id="PizzaSize">
+            <option value="">-- Select Size --</option>
+            <option value="Small">Small</option>
+            <option value="Medium">Medium</option>
+            <option value="Large">Large</option>
+        </select>
+        <span asp-validation-for="NewPizza.Size" class="text-danger"></span>
+    </div>
+
+
+    @* La méthode @Html.DisplayNameFor affiche le nom complet de la propriété IsGlutenFree. Il s’agit d’une méthode
+    d’assistance Razor utilisée pour afficher le nom complet d’une propriété. Cette conception d’étiquette garantit que
+    la case est cochée lorsque l’utilisateur clique sur l’étiquette. *@
+    <div class="form-group form-check">
+        <label class="form-check-label">
+            <input class="form-check-input" asp-for="NewPizza.IsGlutenFree" /> @Html.DisplayNameFor(model =>
+            model.NewPizza.IsGlutenFree)
+        </label>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="NewPizza.Price" class="control-label"></label>
+        <input asp-for="NewPizza.Price" class="form-control" />
+        <span asp-validation-for="NewPizza.Price" class="text-danger"></span>
+    </div>
+
+    @* Un bouton d’envoi Create est ajouté au formulaire pour publier les données du formulaire sur le serveur. Au
+    moment de l’exécution, lorsque l’utilisateur sélectionne ce bouton Créer , le navigateur envoie le formulaire sous
+    forme de requête HTTP POST au serveur. *@
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+
+    @* injecte les scripts de validation côté client dans la page. Les scripts de validation côté client sont
+    utilisés pour valider l’entrée de l’utilisateur avant l’envoi du formulaire au serveur. *@
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
+
+
+
+</form>

@@ -1,10 +1,23 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "The Home for Pizza Lovers";
+    TimeSpan timeInBusiness = DateTime.Now - new DateTime(2018, 8, 14);
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Welcome to Contoso Pizza</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core YAT 2s</a>.</p>
+
+
+    @* Le caractère @ est utilisé pour passer du code HTML à la syntaxe Razor. *@
+    @* La méthode Convert.ToInt32 convertit la propriété TotalDays de la variable timeInBusiness en une valeur entière. *@
+    @* La classe Convert fait partie de l’espace de noms System, qui est importé automatiquement par l’élément <ImplicitUsings> dans le fichier ContosoPizza.csproj. *@
+    <p class="lead">The best pizza in town for @Convert.ToInt32(timeInBusiness.TotalDays) days!</p>
+
+    @* Raccourci zone commentaire = CTRL+K+C / CTRL+K+U*@
+    
+    @* Creation d'un nouveau fichier Page Razor et class PageModel associé via terminal :
+       $ dotnet new page --name toto --namespace ContosoPizza --output Pages *@
+
 </div>
